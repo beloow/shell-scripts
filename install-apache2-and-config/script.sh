@@ -16,7 +16,6 @@ sudo systemctl start apache2
 # Autoriser le trafic HTTP et HTTPS via le pare-feu
 echo "Configuration du pare-feu..."
 sudo ufw allow 'Apache'
-sudo ufw enable
 
 # Vérifier l'état du service Apache
 echo "Vérification du statut d'Apache..."
@@ -29,17 +28,11 @@ create_index_page() {
     
     echo "Création de la page d'accueil pour $domain..."
     sudo mkdir -p "/var/www/$domain"
-    echo "Success! The $domain virtual host is working!" | sudo tee "$index_file" > /dev/null
+    echo "Success! The $domain virtual host is working!" | sudo tee "$index_file"
     sudo chown -R www-data:www-data "/var/www/$domain"
     sudo chmod -R 755 "/var/www/$domain"
     echo "Page d'accueil créée à $index_file"
 }
-
-# Demander à l'utilisateur d'entrer un nom de domaine
-echo "Veuillez entrer le nom de domaine :"
-read your_domain
-create_index_page "$your_domain"
-generate_virtual_host "$your_domain"
 
 # Configurer un nouvel hôte virtuel
 generate_virtual_host() {
@@ -47,7 +40,7 @@ generate_virtual_host() {
     local config_file="/etc/apache2/sites-available/$domain.conf"
     
     echo "Création du fichier de configuration pour l'hôte virtuel $domain..."
-    sudo tee "$config_file" > /dev/null <<EOL
+    sudo tee "$config_file" <<EOL
 <VirtualHost *:80>
     ServerAdmin webmaster@$domain
     ServerName $domain
@@ -66,5 +59,13 @@ EOL
     sudo systemctl reload apache2
     echo "Hôte virtuel $domain configuré et activé."
 }
+
+# Demander à l'utilisateur d'entrer un nom de domaine
+echo "Veuillez entrer le nom de domaine :"
+read your_domain
+
+# Appeler les fonctions
+create_index_page "$your_domain"
+generate_virtual_host "$your_domain"
 
 echo "Installation terminée ! Vous pouvez accéder à Apache via http://$your_domain/"
