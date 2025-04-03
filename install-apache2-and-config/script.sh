@@ -4,9 +4,9 @@
 echo "Mise à jour du système..."
 sudo apt update && sudo apt upgrade -y
 
-# Installer Apache
-echo "Installation d'Apache..."
-sudo apt install apache2 -y
+# Installation de Apache2, Php et ces extensions
+echo "Installation de Apache2, Php et ces extensions..."
+sudo apt install apache2 php libapache2-mod-php php-mysql wget unzip -y
 
 # Activer et démarrer Apache
 echo "Activation et démarrage du service Apache..."
@@ -45,8 +45,8 @@ generate_virtual_host() {
     ServerAdmin webmaster@$domain
     ServerName $domain
     DocumentRoot /var/www/$domain
-    ErrorLog \${APACHE_LOG_DIR}/$domain_error.log
-    CustomLog \${APACHE_LOG_DIR}/$domain_access.log combined
+    ErrorLog \${APACHE_LOG_DIR}/$domain.log
+    CustomLog \${APACHE_LOG_DIR}/$domain.log combined
 </VirtualHost>
 EOL
     

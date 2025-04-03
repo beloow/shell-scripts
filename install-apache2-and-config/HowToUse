@@ -1,0 +1,7 @@
+Start command: 
+
+Sudo bash script.sh
+
+Une fois le script lancé, au bout d'un moment, il va demander le nom de domaine, 
+à ce moment-là il faut lui donner le nom de domaine souhaité en minuscule. 
+Puis entrer, et il continuera jusqu'au message de validation!
